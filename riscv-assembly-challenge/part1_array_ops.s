@@ -1,12 +1,59 @@
 .data
 array: .word 1,10,-4,33,6,-12,55,27,-33,40,-9,24
+sum:   .string "Sum:"
+min:   .string "Min Value:"
+max:   .string "Max Value:"
+count: .string "Total Negative Numbers:"
 
 .text
 .globl main
 main:
-    la a0, array    # address
-    li a1, 12       # size
+    la   a0, array    # address
+    li   a1, 12       # size
+    addi sp, sp, -16
+    sw   a0, 12(sp)
+    sw   a1, 8(sp)  
     call sum_array
+    mv   a2, a0
+    li   a0, 4
+    la   a1, sum
+    ecall
+    mv   a1, a2
+    li   a0 ,1
+    ecall
+    lw   a0, 12(sp)
+    lw   a1, 8(sp)
+    call find_min
+    mv   a2, a0
+    li   a0, 4
+    la   a1, min
+    ecall
+    mv   a1, a2
+    li   a0, 1
+    ecall
+    lw   a0, 12(sp)
+    lw   a1, 8(sp)
+    call find_max
+    mv   a2, a0
+    li   a0, 4
+    la   a1, max
+    ecall
+    mv   a1, a2
+    li   a0, 1
+    ecall
+    lw   a0, 12(sp)
+    lw   a1, 8(sp)
+    call count_negative
+    mv   a2, a0
+    li   a0, 4
+    la   a1, count
+    ecall
+    mv   a1, a2
+    li   a0, 1
+    ecall
+    addi sp, sp, 16
+    li   a0, 10
+    ecall
 
 #Function to sum all the elements of an array
 sum_array:
@@ -79,9 +126,9 @@ count_negative:
 
 for_count:
     bge  t0, a1, end_count
-    slli t1, t0, 2
-    add  t2, a0, t1
-    lw   t4, 0(t2)
+    slli t2, t0, 2
+    add  t3, a0, t2
+    lw   t4, 0(t3)
     addi t0, t0, 1
     bgez t4, skip_count
     addi t1, t1, 1
