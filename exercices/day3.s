@@ -38,4 +38,4 @@ end:
     li   a0, 1
     ecall
     li   a0, 10
-    ecal
+    ecall
